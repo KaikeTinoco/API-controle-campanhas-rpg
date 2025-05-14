@@ -4,12 +4,14 @@ import com.API.Controle.Rpg.api.domain.dtos.CampanhaDTO;
 import com.API.Controle.Rpg.api.domain.enums.StatusCampanha;
 import com.API.Controle.Rpg.api.domain.model.Campanha;
 import com.API.Controle.Rpg.api.repositories.CampanhaRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CampanhaService {
@@ -20,7 +22,7 @@ public class CampanhaService {
         this.repository = repository;
     }
 
-    public void criarCampanha(CampanhaDTO dto){
+    public Campanha criarCampanha(CampanhaDTO dto){
         if (dto.getNome().isBlank() || dto.getSistema().isBlank()
         || dto.getDescricaoHistoria().isBlank() || dto.getRestricoes().isEmpty()) {
             throw new RuntimeException("por favor, preencha todos os campos da campanha!");
@@ -40,6 +42,7 @@ public class CampanhaService {
                 .restricoes(new ArrayList<>())
                 .build();
         repository.save(campanha);
+        return campanha;
     }
 
     public List<Campanha> buscarTodasCampanhas(){
@@ -47,6 +50,7 @@ public class CampanhaService {
     }
 
     //trocar para outro comando quando houver tratação de erros!
+    @Transactional
     public Campanha buscarCampanhaPorNome(String nomeCampanha){
         if(repository.findByNome(nomeCampanha).isEmpty()){
             throw new RuntimeException("não foi possível encontrar uma campanha com esse nome!");
@@ -56,6 +60,7 @@ public class CampanhaService {
     }
 
     //trocar para outro comando quando houver tratação de erros!
+    @Transactional
     public  List<Campanha> buscarCampanhaPorSistema(String sistema){
         if(sistema.isBlank()){
             throw new RuntimeException("por favor informe o nome do sistema!");
@@ -63,6 +68,17 @@ public class CampanhaService {
             throw new RuntimeException("não foi possível encontrar uma campanha com esse sistema!");
         } else {
             return repository.findBySistema(sistema).get();
+        }
+    }
+
+    public String deletarCampanha(Long id){
+        Optional<Campanha> campanha = repository.findById(id);
+
+        if(campanha.isEmpty()){
+            throw new RuntimeException("por favor informe o id da campanha!");
+        } else{
+            repository.delete(campanha.get());
+            return "Campanha deletada com sucesso!";
         }
     }
 }
