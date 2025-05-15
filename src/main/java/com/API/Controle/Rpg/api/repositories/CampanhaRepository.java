@@ -13,4 +13,5 @@ public interface CampanhaRepository extends JpaRepository<Campanha, Long> {
     Optional<Campanha> findById(Long campanhaId);
     Optional<Campanha> findByNome(String nome);
     Optional<List<Campanha>> findBySistema(String sistema);
+
 }
