@@ -1,6 +1,7 @@
 package com.API.Controle.Rpg.api.domain.model;
 
 import com.API.Controle.Rpg.api.domain.enums.StatusCampanha;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -24,10 +25,13 @@ public class Campanha {
     private String sistema;
     @Lob
     private String descricaoHistoria;
+
     @ElementCollection
     @Lob
     private List<String> contextoNarrativoAtual;
+
     @OneToMany(mappedBy = "campanha", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Personagem> personagemList;
     @Enumerated(EnumType.STRING)
     private StatusCampanha status;

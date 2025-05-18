@@ -1,37 +1,26 @@
-package com.API.Controle.Rpg.api.domain.model;
+package com.API.Controle.Rpg.api.domain.dtos;
 
 import com.API.Controle.Rpg.api.domain.enums.Sexo;
 import com.API.Controle.Rpg.api.domain.enums.Tendencia;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import lombok.Builder;
+import lombok.Data;
 
 import java.util.List;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@Entity
+@Data
 @Builder
-public class Personagem {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class PersonagemDTO {
     private String nome;
     private Integer idade;
     private Sexo sexo;
     private Integer nivel;
     private String classe;
     private String subclasse;
-    @Enumerated(EnumType.STRING)
-    private Tendencia tendencia;
 
-    @ManyToOne
-    @JoinColumn(name = "campanha_id")
-    @JsonBackReference
-    private Campanha campanha;
+    private Tendencia tendencia;
 
     private Integer forca;
     private Integer destreza;
@@ -56,34 +45,24 @@ public class Personagem {
     private Integer espacosMagiaNivelUm;
     private Integer espacosMagiaNivelDois;
 
-    @ElementCollection
     private List<String> magiasTruques;
 
-    @ElementCollection
     private List<String> magiasNivelUm;
 
-    @ElementCollection
     private List<String> magiasNivelDois;
 
-    @ElementCollection
     private List<String> equipamentos;
 
-    @ElementCollection
     private List<String> proficiencias;
 
-    @ElementCollection
     private List<String> idiomas;
 
-    @ElementCollection
     private List<String> ferramentas;
 
-    @ElementCollection
     private List<String> salvaguardas;
 
-    @ElementCollection
     private List<String> tracosDePersonalidade;
 
-    @ElementCollection
     private List<String> ideais;
 
     private String vinculo;
