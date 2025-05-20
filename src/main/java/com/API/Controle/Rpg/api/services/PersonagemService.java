@@ -4,6 +4,7 @@ import com.API.Controle.Rpg.api.domain.dtos.PersonagemDTO;
 import com.API.Controle.Rpg.api.domain.model.Campanha;
 import com.API.Controle.Rpg.api.domain.model.Personagem;
 import com.API.Controle.Rpg.api.exceptions.BadRequestException;
+import com.API.Controle.Rpg.api.exceptions.NotFoundException;
 import com.API.Controle.Rpg.api.repositories.PersonagemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -93,4 +94,16 @@ public class PersonagemService {
         }
     }
 
+    private Personagem acharPersonagemPorNome(String nomePersonagem, String nomeCampanha){
+        Campanha campanha = campanhaService.buscarCampanhaPorNome(nomeCampanha);
+        return campanha.getPersonagemList().stream()
+                .filter(personagem -> personagem.getNome().equalsIgnoreCase(nomePersonagem))
+                .findFirst()
+                .orElseThrow(
+                        () -> new NotFoundException("Não foi possível encontrar o personagem:" + nomePersonagem));
+
+    }
+
 }
+
+
