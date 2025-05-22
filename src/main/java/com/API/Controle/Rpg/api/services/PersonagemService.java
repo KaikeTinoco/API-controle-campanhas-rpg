@@ -94,7 +94,7 @@ public class PersonagemService {
         }
     }
 
-    private Personagem acharPersonagemPorNome(String nomePersonagem, String nomeCampanha){
+    public Personagem acharPersonagemPorNome(String nomePersonagem, String nomeCampanha){
         Campanha campanha = campanhaService.buscarCampanhaPorNome(nomeCampanha);
         return campanha.getPersonagemList().stream()
                 .filter(personagem -> personagem.getNome().equalsIgnoreCase(nomePersonagem))
@@ -103,6 +103,14 @@ public class PersonagemService {
                         () -> new NotFoundException("Não foi possível encontrar o personagem:" + nomePersonagem));
 
     }
+
+    public Personagem atualizarPersonagem(String nomeCampanha, Personagem personagemAtualizado) {
+        Campanha campanha = campanhaService.buscarCampanhaPorNome(nomeCampanha);
+        personagemAtualizado.setCampanha(campanha);
+        repository.save(personagemAtualizado);
+        return personagemAtualizado;
+    }
+
 
 }
 

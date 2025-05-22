@@ -27,9 +27,22 @@ public class PersonagemController {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.criarPersonagem(dto, campanhaId));
     }
 
-    @GetMapping("/buscar")
+    @GetMapping("/buscarTodos")
     public ResponseEntity<List<Personagem>> buscarPersonagens(@RequestParam(required = false) Long campanhaId,
                                                               @RequestParam(required = false) String nomeCampanha){
         return ResponseEntity.status(HttpStatus.OK).body(service.checarParametros(campanhaId, nomeCampanha));
     }
+
+    @PutMapping("/atualizar")
+    public ResponseEntity<Personagem> atualizarPersonagem(@RequestParam String nomeCampanha,
+                                                          @RequestBody Personagem personagemAtualizado){
+        return ResponseEntity.status(HttpStatus.OK).body(service.atualizarPersonagem(nomeCampanha, personagemAtualizado));
+    }
+
+    @GetMapping("/busca")
+    public ResponseEntity<Personagem> buscarPersonagem(@RequestParam String nomeCampanha,
+                                                       @RequestParam String nomePersonagem){
+        return ResponseEntity.status(HttpStatus.OK).body(service.acharPersonagemPorNome(nomePersonagem, nomeCampanha));
+    }
+
 }

@@ -35,8 +35,10 @@ public class Campanha {
     private List<Personagem> personagemList;
     @Enumerated(EnumType.STRING)
     private StatusCampanha status;
+
     @CreationTimestamp
     private LocalDateTime dataCriacao;
+
     @UpdateTimestamp
     private LocalDateTime ultimaAtualizacao;
     @ElementCollection
