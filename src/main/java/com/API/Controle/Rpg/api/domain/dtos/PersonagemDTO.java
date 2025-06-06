@@ -69,6 +69,6 @@ public class PersonagemDTO {
 
     private String defeito;
 
-    private boolean isNpc;
+    private boolean npc;
 
 }

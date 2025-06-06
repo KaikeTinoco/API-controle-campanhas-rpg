@@ -5,12 +5,13 @@ import com.API.Controle.Rpg.api.domain.model.Campanha;
 import com.API.Controle.Rpg.api.domain.model.Personagem;
 import com.API.Controle.Rpg.api.exceptions.BadRequestException;
 import com.API.Controle.Rpg.api.exceptions.NotFoundException;
+import com.API.Controle.Rpg.api.mappers.PersonagemMapper;
 import com.API.Controle.Rpg.api.repositories.PersonagemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
+import java.util.List;
 @Service
 public class PersonagemService {
     private final PersonagemRepository repository;
@@ -18,13 +19,14 @@ public class PersonagemService {
     private Campanha campanha;
 
     @Autowired
-    public PersonagemService(PersonagemRepository repository, CampanhaService campanhaService) {
+    public PersonagemService(PersonagemRepository repository, CampanhaService campanhaService, PersonagemMapper mapper) {
         this.repository = repository;
         this.campanhaService = campanhaService;
     }
 
-    //essa função depois só vai receber um texto de descrição, e quem vai criar o DTO vai ser a IA
-    public Personagem criarPersonagem(PersonagemDTO dto, Long campanhaId){
+
+
+    public Personagem criarPersonagem(PersonagemDTO dto, Long campanhaId) {
         Campanha c = campanhaService.findById(campanhaId);
         Personagem personagemNovo = Personagem.builder()
                 .nome(dto.getNome())
@@ -34,7 +36,6 @@ public class PersonagemService {
                 .classe(dto.getClasse())
                 .subclasse(dto.getSubclasse())
                 .tendencia(dto.getTendencia())
-                .campanha(c)
                 .forca(dto.getForca())
                 .destreza(dto.getDestreza())
                 .constituicao(dto.getConstituicao())
@@ -58,7 +59,6 @@ public class PersonagemService {
                 .magiasNivelUm(dto.getMagiasNivelUm())
                 .magiasNivelDois(dto.getMagiasNivelDois())
                 .equipamentos(dto.getEquipamentos())
-                .proficiencias(dto.getProficiencias())
                 .idiomas(dto.getIdiomas())
                 .ferramentas(dto.getFerramentas())
                 .salvaguardas(dto.getSalvaguardas())
@@ -69,7 +69,7 @@ public class PersonagemService {
                 .isNpc(dto.isNpc())
                 .build();
         repository.save(personagemNovo);
-        campanhaService.AdicionarPersonagemNaCampanha(personagemNovo, c);
+        campanhaService.adicionarPersonagemNaCampanha(personagemNovo, c);
         return personagemNovo;
     }
 

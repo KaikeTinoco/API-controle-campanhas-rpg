@@ -1,6 +1,7 @@
 package com.API.Controle.Rpg.api.services;
 
 import com.API.Controle.Rpg.api.domain.dtos.CampanhaDTO;
+import com.API.Controle.Rpg.api.domain.dtos.ResumoDTO;
 import com.API.Controle.Rpg.api.domain.enums.StatusCampanha;
 import com.API.Controle.Rpg.api.domain.model.Campanha;
 import com.API.Controle.Rpg.api.domain.model.Personagem;
@@ -57,7 +58,7 @@ public class CampanhaService {
         if(nomeCampanha.isBlank()){
             throw new BadRequestException("por favor informe um nome de campanha válido");
         }
-        return repository.findByNome(nomeCampanha).orElseThrow(
+        return repository.findByNome(nomeCampanha.strip()).orElseThrow(
                 () -> new NotFoundException("não foi possível encontrar uma campanha com esse nome")
         );
     }
@@ -92,8 +93,22 @@ public class CampanhaService {
                 () -> new NotFoundException("não foi possível encontrar uma campanha com id" + id));
     }
 
-    public void AdicionarPersonagemNaCampanha(Personagem personagemNovo, Campanha campanha){
+    public void adicionarPersonagemNaCampanha(Personagem personagemNovo, Campanha campanha){
         campanha.adicionarPersonagem(personagemNovo);
         repository.save(campanha);
+    }
+
+    public void salvarCampanha(Campanha campanha){
+        repository.save(campanha);
+    }
+
+    public String salvarSessao(ResumoDTO resumoSessao) {
+        if (resumoSessao.getResumoSessao() == null || resumoSessao.getNomeCampanha() == null){
+            throw new BadRequestException("por favor, informe o nome da Campanha e o resumo da sessão");
+        }
+        Campanha campanha = buscarCampanhaPorNome(resumoSessao.getNomeCampanha());
+        campanha.atualizarContextoAtual(resumoSessao.getResumoSessao());
+        salvarCampanha(campanha);
+        return "Campanha atualizada com sucesso";
     }
 }
