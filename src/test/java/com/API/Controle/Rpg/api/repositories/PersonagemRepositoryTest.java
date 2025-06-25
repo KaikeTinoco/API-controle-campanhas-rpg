@@ -15,6 +15,8 @@ import org.springframework.test.context.ActiveProfiles;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -103,19 +105,43 @@ class PersonagemRepositoryTest {
 
     @Test
     void findById() {
+        Personagem p = personagem;
+        Campanha c = campanha;
+        campanhaRepository.save(c);
+        repository.save(p);
+        c.adicionarPersonagem(p);
+        Personagem personagemFound = repository.findById(p.getId()).get();
+        assertEquals(p, personagemFound);
     }
 
     @Test
     void findByIsNpc() {
+        Personagem p = personagem;
+        Campanha c = campanha;
+        campanhaRepository.save(c);
+        repository.save(p);
+        c.adicionarPersonagem(p);
+        List<Personagem> personagems = repository.findByIsNpc(false).get();
+        assertEquals(p, personagems.get(0));
     }
 
     @Test
     void save(){
-
+        Personagem p = personagem;
+        Campanha c = campanha;
+        campanhaRepository.save(c);
+        repository.save(p);
+        assertNotNull(p.getId());
     }
 
     @Test
     void delete(){
-
+        Personagem p = personagem;
+        Campanha c = campanha;
+        campanhaRepository.save(c);
+        repository.save(p);
+        Long id = p.getId();
+        repository.delete(p);
+        assertEquals(Optional.empty(), repository.findById(id));
     }
 }
