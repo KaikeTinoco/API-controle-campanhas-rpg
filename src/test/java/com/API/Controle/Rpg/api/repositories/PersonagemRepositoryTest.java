@@ -5,6 +5,7 @@ import com.API.Controle.Rpg.api.domain.enums.StatusCampanha;
 import com.API.Controle.Rpg.api.domain.enums.Tendencia;
 import com.API.Controle.Rpg.api.domain.model.Campanha;
 import com.API.Controle.Rpg.api.domain.model.Personagem;
+import com.API.Controle.Rpg.api.exceptions.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +14,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -104,6 +102,17 @@ class PersonagemRepositoryTest {
     }
 
     @Test
+    void findByNomeNotFound() {
+        Personagem p = personagem;
+        Campanha c = campanha;
+        campanhaRepository.save(c);
+        repository.save(p);
+        c.adicionarPersonagem(p);
+        assertThrows(NoSuchElementException.class, () -> repository.findByNome("erro").get());
+    }
+
+
+    @Test
     void findById() {
         Personagem p = personagem;
         Campanha c = campanha;
@@ -115,6 +124,17 @@ class PersonagemRepositoryTest {
     }
 
     @Test
+    void findByIdNotFound() {
+        Personagem p = personagem;
+        Campanha c = campanha;
+        campanhaRepository.save(c);
+        repository.save(p);
+        c.adicionarPersonagem(p);
+        assertThrows(NoSuchElementException.class, () -> repository.findById(99L).get());
+
+    }
+
+    @Test
     void findByIsNpc() {
         Personagem p = personagem;
         Campanha c = campanha;
@@ -123,6 +143,17 @@ class PersonagemRepositoryTest {
         c.adicionarPersonagem(p);
         List<Personagem> personagems = repository.findByIsNpc(false).get();
         assertEquals(p, personagems.get(0));
+    }
+
+    @Test
+    void findByIsNpcEmpty() {
+        Personagem p = personagem;
+        Campanha c = campanha;
+        campanhaRepository.save(c);
+        repository.save(p);
+        c.adicionarPersonagem(p);
+        List<Personagem> personagems = repository.findByIsNpc(true).get();
+        assertEquals(0, personagems.size());
     }
 
     @Test
