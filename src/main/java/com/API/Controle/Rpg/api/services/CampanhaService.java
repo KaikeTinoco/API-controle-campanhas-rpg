@@ -1,8 +1,10 @@
 package com.API.Controle.Rpg.api.services;
 
 import com.API.Controle.Rpg.api.domain.dtos.CampanhaDTO;
+import com.API.Controle.Rpg.api.domain.dtos.ResumoDTO;
 import com.API.Controle.Rpg.api.domain.enums.StatusCampanha;
 import com.API.Controle.Rpg.api.domain.model.Campanha;
+import com.API.Controle.Rpg.api.domain.model.Personagem;
 import com.API.Controle.Rpg.api.exceptions.BadRequestException;
 import com.API.Controle.Rpg.api.exceptions.NotFoundException;
 import com.API.Controle.Rpg.api.repositories.CampanhaRepository;
@@ -56,7 +58,7 @@ public class CampanhaService {
         if(nomeCampanha.isBlank()){
             throw new BadRequestException("por favor informe um nome de campanha válido");
         }
-        return repository.findByNome(nomeCampanha).orElseThrow(
+        return repository.findByNome(nomeCampanha.strip()).orElseThrow(
                 () -> new NotFoundException("não foi possível encontrar uma campanha com esse nome")
         );
     }
@@ -81,5 +83,32 @@ public class CampanhaService {
         );
          repository.delete(campanha);
          return "Deletado com sucesso!";
+    }
+
+    public Campanha findById(Long id){
+        if (id == null){
+            throw new  BadRequestException("por favor informe um id válido");
+        }
+        return repository.findById(id).orElseThrow(
+                () -> new NotFoundException("não foi possível encontrar uma campanha com id" + id));
+    }
+
+    public void adicionarPersonagemNaCampanha(Personagem personagemNovo, Campanha campanha){
+        campanha.adicionarPersonagem(personagemNovo);
+        repository.save(campanha);
+    }
+
+    public void salvarCampanha(Campanha campanha){
+        repository.save(campanha);
+    }
+
+    public String salvarSessao(ResumoDTO resumoSessao) {
+        if (resumoSessao.getResumoSessao() == null || resumoSessao.getNomeCampanha() == null){
+            throw new BadRequestException("por favor, informe o nome da Campanha e o resumo da sessão");
+        }
+        Campanha campanha = buscarCampanhaPorNome(resumoSessao.getNomeCampanha());
+        campanha.atualizarContextoAtual(resumoSessao.getResumoSessao());
+        salvarCampanha(campanha);
+        return "Campanha atualizada com sucesso";
     }
 }

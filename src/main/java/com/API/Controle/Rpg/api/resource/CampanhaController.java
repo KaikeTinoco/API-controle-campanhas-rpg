@@ -1,6 +1,7 @@
 package com.API.Controle.Rpg.api.resource;
 
 import com.API.Controle.Rpg.api.domain.dtos.CampanhaDTO;
+import com.API.Controle.Rpg.api.domain.dtos.ResumoDTO;
 import com.API.Controle.Rpg.api.domain.model.Campanha;
 import com.API.Controle.Rpg.api.services.CampanhaService;
 import lombok.Getter;
@@ -46,6 +47,11 @@ public class CampanhaController {
     @DeleteMapping("/deletar")
     public ResponseEntity<String> deletarCampanha(@RequestParam Long id){
         return ResponseEntity.ok(service.deletarCampanha(id));
+    }
+
+    @PostMapping("/atualizar")
+    public ResponseEntity<String> salvarSessao(@RequestBody ResumoDTO dto){
+        return ResponseEntity.status(HttpStatus.OK).body(service.salvarSessao(dto));
     }
 
 

@@ -2,7 +2,7 @@ package com.API.Controle.Rpg.api.domain.enums;
 
 public enum Sexo {
     MASCULINO("masculino"),
-    FEMINIO("feminino");
+    FEMININO("feminino");
 
     private final String descricao;
 
