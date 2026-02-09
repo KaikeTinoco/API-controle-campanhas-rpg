@@ -7,6 +7,7 @@ import com.API.Controle.Rpg.api.domain.enums.StatusCampanha;
 import com.API.Controle.Rpg.api.domain.enums.Tendencia;
 import com.API.Controle.Rpg.api.domain.model.Campanha;
 import com.API.Controle.Rpg.api.domain.model.Personagem;
+import com.API.Controle.Rpg.api.mapper.PersonagemMapper;
 import com.API.Controle.Rpg.api.repositories.CampanhaRepository;
 import com.API.Controle.Rpg.api.repositories.PersonagemRepository;
 import org.hibernate.mapping.Any;
@@ -37,6 +38,9 @@ class PersonagemServiceTest {
 
     @Mock
     CampanhaRepository campanhaRepository;
+
+    @Mock
+    PersonagemMapper personagemMapper;
 
     Campanha campanha;
 
@@ -202,6 +206,7 @@ class PersonagemServiceTest {
         Campanha c;
         c = campanhaService.criarCampanha(dto);
         Mockito.doNothing().when(this.campanhaService).adicionarPersonagemNaCampanha(personagem,c);
+        Mockito.when(this.personagemMapper.toEntity(personagemDto)).thenReturn(personagem);
         Mockito.when(this.repository.save(personagem)).thenReturn(personagem);
         Personagem p = service.criarPersonagem(personagemDto, 1L);
         assertEquals("teste", personagem.getNome());
@@ -213,7 +218,7 @@ class PersonagemServiceTest {
         Campanha c = campanhaService.criarCampanha(dto);
         Mockito.when(this.repository.save(personagem)).thenReturn(personagem);
         Personagem p = service.criarPersonagem(personagemDto, 1L);
-        c.setPersonagemList(Arrays.asList(p)); //simulando o a adicao do personagem
+        c.setPersonagemList(Arrays.asList(p));
         Mockito.when(this.campanhaService.buscarCampanhaPorNome(c.getNome())).thenReturn(c);
         Mockito.when(this.campanhaRepository.findByNome(c.getNome())).thenReturn(Optional.of(c));
         List<Personagem> personagens = service.listarPersonagensNaCampanha(c.getNome());
@@ -235,15 +240,13 @@ class PersonagemServiceTest {
 
     @Test
     void acharPersonagemPorNome() {
-        Mockito.when(this.campanhaService.criarCampanha(dto)).thenReturn(campanha);
-        Campanha c = campanhaService.criarCampanha(dto);
-        Mockito.when(this.repository.save(personagem)).thenReturn(personagem);
+        Mockito.when(personagemMapper.toEntity(personagemDto)).thenReturn(personagem);
+        Mockito.when(this.campanhaService.buscarCampanhaPorNome(campanha.getNome())).thenReturn(campanha);
         Personagem p = service.criarPersonagem(personagemDto, 1L);
-        c.setPersonagemList(Arrays.asList(p)); //simulando o a adicao do personagem
-        Mockito.when(this.campanhaService.buscarCampanhaPorNome(c.getNome())).thenReturn(c);
-        Mockito.when(this.campanhaRepository.findByNome(c.getNome())).thenReturn(Optional.of(c));
-        Personagem personagemFound = service.acharPersonagemPorNome("teste", c.getNome());
-        assertEquals(p, personagemFound);
+        campanha.setPersonagemList(List.of(p));
+        Personagem personagemFound = service.acharPersonagemPorNome("teste", campanha.getNome());
+        assertNotNull(personagemFound);
+        assertEquals("teste", personagemFound.getNome());
     }
 
     @Test

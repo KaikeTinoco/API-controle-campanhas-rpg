@@ -24,6 +24,15 @@ public class PersonagemController {
         this.service = service;
     }
 
+    /**
+     * <p>
+     * Registra um novo personagem (Jogador ou NPC) vinculado a uma campanha ativa.
+     * Os dados são geralmente gerados pela IA para garantir compatibilidade com o cenário.
+     * </p>
+     * @param dto Ficha técnica do personagem.
+     * @param campanhaId ID da campanha onde o personagem será inserido.
+     * @return O {@link Personagem} salvo no banco.
+     */
     @PostMapping("/criar")
     @Operation(summary = "Cadastro de Personagens",
             description = "Recebe um dto gerado pela IA responsável por essa tarefa e o ID da campanha, registrando o personagem")
@@ -32,25 +41,49 @@ public class PersonagemController {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.criarPersonagem(dto, campanhaId));
     }
 
+    /**
+     * <p>
+     * Lista personagens de uma campanha. Permite flexibilidade na busca por ID ou Nome.
+     * </p>
+     * @param campanhaId (Opcional) ID da campanha.
+     * @param nomeCampanha (Opcional) Nome da campanha.
+     * @return Lista de personagens pertencentes à campanha especificada.
+     */
     @GetMapping("/buscarTodos")
     @Operation(summary = "Buscar Todos os Personagens",
-    description = "Busca todos os personagens cadastrados em uma campanha, usando o nome ou o id dela")
+            description = "Busca todos os personagens cadastrados em uma campanha, usando o nome ou o id dela")
     public ResponseEntity<List<Personagem>> buscarPersonagens(@RequestParam(required = false) Long campanhaId,
                                                               @RequestParam(required = false) String nomeCampanha){
         return ResponseEntity.status(HttpStatus.OK).body(service.checarParametros(campanhaId, nomeCampanha));
     }
 
+    /**
+     * <p>
+     * Atualiza integralmente os dados de um personagem.
+     * </p>
+     * @param nomeCampanha Contexto da campanha para validação.
+     * @param personagemAtualizado Novo objeto de personagem com as alterações.
+     * @return Personagem atualizado.
+     */
     @PutMapping("/atualizar")
     @Operation(summary = "Atualizar Personagem",
-    description = "Atualiza o personagem da campanha, sendo jogador ou NPC, recebendo um novo objeto e substituindo ele no lugar do antigo")
+            description = "Atualiza o personagem da campanha, sendo jogador ou NPC, recebendo um novo objeto e substituindo ele no lugar do antigo")
     public ResponseEntity<Personagem> atualizarPersonagem(@RequestParam String nomeCampanha,
                                                           @RequestBody Personagem personagemAtualizado){
         return ResponseEntity.status(HttpStatus.OK).body(service.atualizarPersonagem(nomeCampanha, personagemAtualizado));
     }
 
+    /**
+     * <p>
+     * Busca um personagem específico por nome dentro de uma campanha.
+     * </p>
+     * @param nomeCampanha Nome da campanha.
+     * @param nomePersonagem Nome do personagem.
+     * @return Detalhes do personagem encontrado.
+     */
     @GetMapping("/busca")
     @Operation(summary = "Buscar Personagem Específico",
-    description = "Busca um personagem específico usando o nome dele e o nome da campanha")
+            description = "Busca um personagem específico usando o nome dele e o nome da campanha")
     public ResponseEntity<Personagem> buscarPersonagem(@RequestParam String nomeCampanha,
                                                        @RequestParam String nomePersonagem){
         return ResponseEntity.status(HttpStatus.OK).body(service.acharPersonagemPorNome(nomePersonagem, nomeCampanha));
