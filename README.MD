@@ -122,15 +122,45 @@ curl -X POST "http://localhost:8080/campanha/criar" \
 Exemplo mínimo PersonagemDTO (body para POST /personagens/criar?campanhaId=1):
 ```json
 {
-  "nome":"Gorim",
-  "idade":40,
-  "sexo":"MASCULINO",
-  "nivel":5,
-  "classe":"Guerreiro",
-  "forca":16,
-  "destreza":12,
-  "constituicao":14,
-  "npc":false
+"nome": "Gorim, o Resiliente",
+"idade": 142,
+"sexo": "MASCULINO",
+"nivel": 5,
+"classe": "Guerreiro",
+"subclasse": "Mestre da Batalha",
+"tendencia": "LEAL_BOM",
+"forca": 18,
+"destreza": 12,
+"constituicao": 16,
+"inteligencia": 10,
+"sabedoria": 12,
+"carisma": 8,
+"modForca": 4,
+"modDestreza": 1,
+"modConstituicao": 3,
+"modInteligencia": 0,
+"modSabedoria": 1,
+"modCarisma": -1,
+"pontosDeVida": 54,
+"dadoDeVida": "1d10",
+"classeArmadura": 18,
+"cdMagia": 0,
+"modAtaqueMagico": 0,
+"espacosMagiaNivelUm": 0,
+"espacosMagiaNivelDois": 0,
+"magiasTruques": [],
+"magiasNivelUm": [],
+"magiasNivelDois": [],
+"equipamentos": ["Armadura de Placas", "Machado de Batalha", "Escudo"],
+"proficiencias": ["Atletismo", "Sobrevivência"],
+"idiomas": ["Comum", "Anão"],
+"ferramentas": ["Ferramentas de Ferreiro"],
+"salvaguardas": ["Força", "Constituição"],
+"tracosDePersonalidade": ["Sempre carrego uma pedra da minha montanha natal."],
+"ideais": ["Honra acima de tudo."],
+"vinculo": "Protegerei meus companheiros até o fim.",
+"defeito": "Tenho dificuldades em confiar em elfos.",
+"npc": false
 }
 ```
 
@@ -138,7 +168,47 @@ cURL criar personagem:
 ```bash
 curl -X POST "http://localhost:8080/personagens/criar?campanhaId=1" \
   -H "Content-Type: application/json" \
-  -d '{ "nome":"Gorim", "idade":40, "nivel":5, "classe":"Guerreiro", "forca":16, "destreza":12, "constituicao":14, "npc":false }'
+  -d '{
+    "nome": "Gorim, o Resiliente",
+    "idade": 142,
+    "sexo": "MASCULINO",
+    "nivel": 5,
+    "classe": "Guerreiro",
+    "subclasse": "Mestre da Batalha",
+    "tendencia": "LEAL_BOM",
+    "forca": 18,
+    "destreza": 12,
+    "constituicao": 16,
+    "inteligencia": 10,
+    "sabedoria": 12,
+    "carisma": 8,
+    "modForca": 4,
+    "modDestreza": 1,
+    "modConstituicao": 3,
+    "modInteligencia": 0,
+    "modSabedoria": 1,
+    "modCarisma": -1,
+    "pontosDeVida": 54,
+    "dadoDeVida": "1d10",
+    "classeArmadura": 18,
+    "cdMagia": 0,
+    "modAtaqueMagico": 0,
+    "espacosMagiaNivelUm": 0,
+    "espacosMagiaNivelDois": 0,
+    "magiasTruques": [],
+    "magiasNivelUm": [],
+    "magiasNivelDois": [],
+    "equipamentos": ["Armadura de Placas", "Machado de Batalha", "Escudo"],
+    "proficiencias": ["Atletismo", "Sobrevivência"],
+    "idiomas": ["Comum", "Anão"],
+    "ferramentas": ["Ferramentas de Ferreiro"],
+    "salvaguardas": ["Força", "Constituição"],
+    "tracosDePersonalidade": ["Sempre carrego uma pedra da minha montanha natal."],
+    "ideais": ["Honra acima de tudo."],
+    "vinculo": "Protegerei meus companheiros até o fim.",
+    "defeito": "Tenho dificuldades em confiar em elfos.",
+    "npc": false
+  }'
 ```
 
 ---
