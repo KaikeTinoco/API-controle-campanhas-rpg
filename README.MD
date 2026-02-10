@@ -287,6 +287,3 @@ Rodar suíte de testes:
 - Autor: **KaikeTinoco** (repositório original)
 - Para dúvidas ou sugestões: abra uma issue no repositório.
 
----
-
-Obrigado por usar/avaliar o projeto! Se desejar, posso **gerar payloads mais completos**, criar uma **Postman collection** com as rotas, ou adicionar **exemplos de resposta** para cada endpoint. 🙌
